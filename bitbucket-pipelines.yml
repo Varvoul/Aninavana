@@ -1,0 +1,48 @@
+# bitbucket-pipelines.yml - Simple deployment
+image: node:18-alpine
+
+pipelines:
+  branches:
+    main:
+      - step:
+          name: "Install, Build, Deploy"
+          caches:
+            - node
+          script:
+            # Install dependencies
+            - npm ci
+            
+            # Build production site
+            - npm run build:prod
+            
+            # Test the build
+            - if [ -f "_site/index.html" ]; then echo "✅ Build successful"; else echo "❌ Build failed"; exit 1; fi
+            
+            # Prepare for Pages deployment
+            - echo "📦 Preparing deployment..."
+            
+            # Method 1: Deploy via git (creates pages branch)
+            - |
+              echo "🚀 Deploying via git..."
+              git checkout --orphan pages 2>/dev/null || git checkout pages
+              git rm -rf . 2>/dev/null || true
+              cp -r _site/* .
+              git add -A
+              git commit -m "Deploy $BITBUCKET_COMMIT [skip ci]" --allow-empty
+              git push origin pages --force
+              
+              echo "✅ Deployed to 'pages' branch"
+              echo ""
+              echo "⚙️  Configure Bitbucket Pages:"
+              echo "1. Repo Settings > Pages"
+              echo "2. Enable Pages"
+              echo "3. Source: Branch 'pages'"
+              echo "4. Directory: '/'"
+              echo ""
+              echo "🌐 Your site:"
+              echo "   https://$BITBUCKET_WORKSPACE_SLUG.sites.bitbucket.io/$BITBUCKET_REPO_SLUG/"
+            
+            # Method 2: Alternative - use artifacts and manual deployment
+            - echo "📁 Build artifacts saved in _site/"
+          artifacts:
+            - _site/**
