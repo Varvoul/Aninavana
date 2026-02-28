@@ -87,6 +87,83 @@
             background-color: #4B5563;
             border-radius: 20px;
         }
+        
+        /* Additional styles for better search UI */
+        .search-results-container {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .search-container .search-icon,
+        .mobile-search-container .search-icon {
+            transition: color 0.2s ease;
+            pointer-events: none;
+        }
+
+        /* Mobile menu animations */
+        #mobile-menu {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #mobile-menu.menu-open {
+            transform: translateX(0);
+        }
+
+        /* Search input focus styles */
+        #desktop-search-input:focus,
+        #mobile-search-input:focus {
+            box-shadow: 0 0 0 3px rgba(73, 139, 187, 0.1);
+        }
+
+        /* Loading animation */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+
+        /* Image fallback styling */
+        img[onerror] {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+        }
+
+        .dark img[onerror] {
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+        }
+
+        /* Hide scrollbar but allow scrolling */
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Smooth transitions */
+        .search-suggestions-list a {
+            transition: all 0.2s ease;
+        }
+
+        /* Mobile search bar transitions */
+        #mobile-search-bar {
+            transition: all 0.3s ease;
+        }
+
+        /* Better touch targets for mobile */
+        @media (max-width: 640px) {
+            #mobile-search-input {
+                font-size: 16px;
+            }
+            
+            .search-suggestions-list a {
+                padding: 12px;
+            }
+        }
     </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-text-light transition-colors duration-300 min-h-screen flex flex-col relative">
@@ -103,114 +180,46 @@
             </button>
         </div>
         <div class="p-4 space-y-4">
-            <a class="block text-sm font-medium hover:text-primary py-2 border-b border-gray-100 dark:border-gray-800" href="/">Home</a>
+            <a class="block text-sm font-medium hover:text-primary py-2 border-b border-gray-100 dark:border-gray-800 {% if page.url == '/' %}text-primary{% endif %}" href="/">Home</a>
             <div class="py-2 border-b border-gray-100 dark:border-gray-800">
-                <button class="flex items-center justify-between w-full text-sm font-medium hover:text-primary focus:outline-none" onclick="toggleMobileDropdown('genre-mobile')">
+                <button class="flex items-center justify-between w-full text-sm font-medium hover:text-primary focus:outline-none" onclick="toggleMobileDropdown('genre-mobile', 'genre-arrow')">
                     <span>Genre</span>
                     <span class="material-symbols-outlined text-sm transform transition-transform" id="genre-arrow">expand_more</span>
                 </button>
                 <div class="hidden mt-2 ml-4 space-y-2 text-sm text-gray-500 dark:text-gray-400" id="genre-mobile">
-                    <a class="block hover:text-primary" href="#">Action</a>
-                    <a class="block hover:text-primary" href="#">Adventure</a>
-                    <a class="block hover:text-primary" href="#">Cars</a>
-                    <a class="block hover:text-primary" href="#">Comedy</a>
-                    <a class="block hover:text-primary" href="#">Dementia</a>
-                    <a class="block hover:text-primary" href="#">Demons</a>
-                    <a class="block hover:text-primary" href="#">Drama</a>
-                    <a class="block hover:text-primary" href="#">Ecchi</a>
-                    <a class="block hover:text-primary" href="#">Fantasy</a>
-                    <a class="block hover:text-primary" href="#">Game</a>
-                    <a class="block hover:text-primary" href="#">Harem</a>
-                    <a class="block hover:text-primary" href="#">Historical</a>
-                    <a class="block hover:text-primary" href="#">Horror</a>
-                    <a class="block hover:text-primary" href="#">Isekai</a>
-                    <a class="block hover:text-primary" href="#">Josei</a>
-                    <a class="block hover:text-primary" href="#">Kids</a>
-                    <a class="block hover:text-primary" href="#">Magic</a>
-                    <a class="block hover:text-primary" href="#">Martial Arts</a>
-                    <a class="block hover:text-primary" href="#">Mecha</a>
-                    <a class="block hover:text-primary" href="#">Military</a>
-                    <a class="block hover:text-primary" href="#">Music</a>
-                    <a class="block hover:text-primary" href="#">Mystery</a>
-                    <a class="block hover:text-primary" href="#">Noir</a>
-                    <a class="block hover:text-primary" href="#">Parody</a>
-                    <a class="block hover:text-primary" href="#">Police</a>
-                    <a class="block hover:text-primary" href="#">Psychological</a>
-                    <a class="block hover:text-primary" href="#">Politic</a>
-                    <a class="block hover:text-primary" href="#">Romance</a>
-                    <a class="block hover:text-primary" href="#">Reality-Show</a>
-                    <a class="block hover:text-primary" href="#">Reality-TV</a>
-                    <a class="block hover:text-primary" href="#">Samurai</a>
-                    <a class="block hover:text-primary" href="#">School</a>
-                    <a class="block hover:text-primary" href="#">Sci-Fi</a>
-                    <a class="block hover:text-primary" href="#">Seinen</a>
-                    <a class="block hover:text-primary" href="#">Shoujo</a>
-                    <a class="block hover:text-primary" href="#">Shoujo Ai</a>
-                    <a class="block hover:text-primary" href="#">Shounen</a>
-                    <a class="block hover:text-primary" href="#">Shounen Ai</a>
-                    <a class="block hover:text-primary" href="#">Slice of Life</a>
-                    <a class="block hover:text-primary" href="#">Space</a>
-                    <a class="block hover:text-primary" href="#">Sports</a>
-                    <a class="block hover:text-primary" href="#">Super Power</a>
-                    <a class="block hover:text-primary" href="#">Supernatural</a>
-                    <a class="block hover:text-primary" href="#">Thriller</a>
-                    <a class="block hover:text-primary" href="#">Vampire</a>
-                    <a class="block hover:text-primary" href="#">War</a>
+                    {% assign all_genres = [] %}
+                    {% for post in collections.posts %}
+                        {% for genre in post.data.genres %}
+                            {% assign all_genres = all_genres | push: genre %}
+                        {% endfor %}
+                    {% endfor %}
+                    {% assign unique_genres = all_genres | uniq | sort %}
+                    {% for genre in unique_genres limit: 8 %}
+                        <a class="block hover:text-primary" href="/search?genre={{ genre | url_encode }}">{{ genre }}</a>
+                    {% endfor %}
                 </div>
             </div>
             <div class="py-2 border-b border-gray-100 dark:border-gray-800">
-                <button class="flex items-center justify-between w-full text-sm font-medium hover:text-primary focus:outline-none" onclick="toggleMobileDropdown('country-mobile')">
+                <button class="flex items-center justify-between w-full text-sm font-medium hover:text-primary focus:outline-none" onclick="toggleMobileDropdown('country-mobile', 'country-arrow')">
                     <span>Country</span>
                     <span class="material-symbols-outlined text-sm transform transition-transform" id="country-arrow">expand_more</span>
                 </button>
                 <div class="hidden mt-2 ml-4 space-y-2 text-sm text-gray-500 dark:text-gray-400" id="country-mobile">
-                    <a class="block hover:text-primary" href="#">Argentina</a>
-                    <a class="block hover:text-primary" href="#">Australia</a>
-                    <a class="block hover:text-primary" href="#">Austria</a>
-                    <a class="block hover:text-primary" href="#">Bangladesh</a>
-                    <a class="block hover:text-primary" href="#">Belgium</a>
-                    <a class="block hover:text-primary" href="#">Brazil</a>
-                    <a class="block hover:text-primary" href="#">Canada</a>
-                    <a class="block hover:text-primary" href="#">Chile</a>
-                    <a class="block hover:text-primary" href="#">China</a>
-                    <a class="block hover:text-primary" href="#">Colombia</a>
-                    <a class="block hover:text-primary" href="#">Czechia</a>
-                    <a class="block hover:text-primary" href="#">Denmark</a>
-                    <a class="block hover:text-primary" href="#">Egypt</a>
-                    <a class="block hover:text-primary" href="#">Finland</a>
-                    <a class="block hover:text-primary" href="#">France</a>
-                    <a class="block hover:text-primary" href="#">Germany</a>
-                    <a class="block hover:text-primary" href="#">Greece</a>
-                    <a class="block hover:text-primary" href="#">Hong Kong</a>
-                    <a class="block hover:text-primary" href="#">Hungary</a>
-                    <a class="block hover:text-primary" href="#">Iceland</a>
-                    <a class="block hover:text-primary" href="#">India</a>
-                    <a class="block hover:text-primary" href="#">Indonesia</a>
-                    <a class="block hover:text-primary" href="#">Iran</a>
-                    <a class="block hover:text-primary" href="#">Ireland</a>
-                    <a class="block hover:text-primary" href="#">Israel</a>
-                    <a class="block hover:text-primary" href="#">Italy</a>
-                    <a class="block hover:text-primary" href="#">Japan</a>
-                    <a class="block hover:text-primary" href="#">Mexico</a>
-                    <a class="block hover:text-primary" href="#">Netherlands</a>
-                    <a class="block hover:text-primary" href="#">New Zealand</a>
-                    <a class="block hover:text-primary" href="#">Nigeria</a>
-                    <a class="block hover:text-primary" href="#">Pakistan</a>
-                    <a class="block hover:text-primary" href="#">Philippines</a>
-                    <a class="block hover:text-primary" href="#">Poland</a>
-                    <a class="block hover:text-primary" href="#">Russia</a>
-                    <a class="block hover:text-primary" href="#">South Africa</a>
-                    <a class="block hover:text-primary" href="#">Spain</a>
-                    <a class="block hover:text-primary" href="#">Sweden</a>
-                    <a class="block hover:text-primary" href="#">Taiwan</a>
-                    <a class="block hover:text-primary" href="#">Thailand</a>
-                    <a class="block hover:text-primary" href="#">Turkey</a>
-                    <a class="block hover:text-primary" href="#">UK</a>
+                    {% assign all_countries = [] %}
+                    {% for post in collections.posts %}
+                        {% if post.data.country %}
+                            {% assign all_countries = all_countries | push: post.data.country %}
+                        {% endif %}
+                    {% endfor %}
+                    {% assign unique_countries = all_countries | uniq | sort %}
+                    {% for country in unique_countries limit: 8 %}
+                        <a class="block hover:text-primary" href="/search?country={{ country | url_encode }}">{{ country }}</a>
+                    {% endfor %}
                 </div>
             </div>
-            <a class="block text-sm font-medium hover:text-primary py-2 border-b border-gray-100 dark:border-gray-800" href="#">Top IMDB</a>
-            <a class="block text-sm font-medium hover:text-primary py-2 border-b border-gray-100 dark:border-gray-800" href="https://editor.wix.com/wixel-view/forms/7405900275916997729">Updates</a>
-            <a class="block text-sm font-medium hover:text-primary py-2" href="#">Sent request</a>
+            <a class="block text-sm font-medium hover:text-primary py-2 border-b border-gray-100 dark:border-gray-800" href="/search?rating=8.5">Top IMDB</a>
+            <a class="block text-sm font-medium hover:text-primary py-2 border-b border-gray-100 dark:border-gray-800" href="/updates/">Updates</a>
+            <a class="block text-sm font-medium hover:text-primary py-2" href="https://editor.wix.com/wixel-view/forms/7405900275916997729">Sent request</a>
         </div>
     </div>
     
@@ -222,57 +231,23 @@
                     <span class="material-symbols-outlined text-3xl">menu</span>
                 </button>
                 <nav class="hidden lg:flex items-center space-x-6 text-sm font-medium">
-                    <a class="hover:text-primary transition-colors text-primary" href="/">Home</a>
+                    <a class="hover:text-primary transition-colors {% if page.url == '/' %}text-primary{% endif %}" href="/">Home</a>
                     <div class="relative group">
                         <button class="flex items-center space-x-1 hover:text-primary transition-colors focus:outline-none py-4">
                             <span>Genre</span>
                             <span class="material-symbols-outlined text-sm">expand_more</span>
                         </button>
                         <div class="absolute top-full left-0 w-[600px] bg-white dark:bg-[#1A1D29] rounded-b-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border-t-2 border-primary grid grid-cols-4 gap-4 p-6 z-50">
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Adventure</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Adult</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Cars</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Comedy</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Dementia</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Demons</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Drama</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Ecchi</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Fantasy</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Game</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Harem</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Historical</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Horror</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Isekai</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Josei</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Kids</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Magic</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Martial Arts</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Mecha</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Military</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Music</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Mystery</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Noir</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Parody</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Police</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Politic</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Psychological</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Romance</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Samurai</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">School</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Sci-Fi</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Seinen</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Shoujo</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Shoujo Ai</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Shounen</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Shounen Ai</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Slice of Life</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Space</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Sports</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Super Power</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Supernatural</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Thriller</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Vampire</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">War</a>
+                            {% assign all_genres = [] %}
+                            {% for post in collections.posts %}
+                                {% for genre in post.data.genres %}
+                                    {% assign all_genres = all_genres | push: genre %}
+                                {% endfor %}
+                            {% endfor %}
+                            {% assign unique_genres = all_genres | uniq | sort %}
+                            {% for genre in unique_genres limit: 16 %}
+                                <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="/search?genre={{ genre | url_encode }}">{{ genre }}</a>
+                            {% endfor %}
                         </div>
                     </div>
                     <div class="relative group">
@@ -281,50 +256,20 @@
                             <span class="material-symbols-outlined text-sm">expand_more</span>
                         </button>
                         <div class="absolute top-full left-0 w-[600px] bg-white dark:bg-[#1A1D29] rounded-b-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border-t-2 border-primary grid grid-cols-4 gap-4 p-6 z-50">
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Argentina</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Australia</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Austria</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Belgium</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Brazil</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Canada</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">China</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Colombia</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Czech Republic</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Denmark</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Finland</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">France</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Germany</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Hong Kong</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Hungary</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">India</a>
-                            <a class="block hover:text-primary text-sm text-gray-600 dark:text-gray-400" href="#">Ireland</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Israel</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Italy</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Japan</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Luxembourg</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Mexico</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Netherlands</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">New Zealand</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Nigeria</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Norway</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Philippines</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Poland</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Romania</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Russia</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">South Africa</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">South Korea</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Spain</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Sweden</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Switzerland</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Taiwan</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Thailand</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">Turkey</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">United Kingdom</a>
-                            <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="#">United States</a>
+                            {% assign all_countries = [] %}
+                            {% for post in collections.posts %}
+                                {% if post.data.country %}
+                                    {% assign all_countries = all_countries | push: post.data.country %}
+                                {% endif %}
+                            {% endfor %}
+                            {% assign unique_countries = all_countries | uniq | sort %}
+                            {% for country in unique_countries limit: 16 %}
+                                <a class="hover:text-primary block text-sm text-gray-600 dark:text-gray-400" href="/search?country={{ country | url_encode }}">{{ country }}</a>
+                            {% endfor %}
                         </div>
                     </div>
-                    <a class="hover:text-primary transition-colors" href="#">Top IMDB</a>
-                    <a class="hover:text-primary transition-colors" href="#">Updates</a>
+                    <a class="hover:text-primary transition-colors" href="/search?rating=8.5">Top IMDB</a>
+                    <a class="hover:text-primary transition-colors" href="/updates/">Updates</a>
                     <a class="hover:text-primary transition-colors" href="https://editor.wix.com/wixel-view/forms/7405900275916997729">Sent request</a>
                 </nav>
             </div>
@@ -334,29 +279,53 @@
                 </a>
             </div>
             <div class="flex items-center space-x-4">
-                <div class="relative hidden sm:block">
-                    <input class="bg-gray-100 dark:bg-gray-800 text-sm rounded-full py-2 pl-4 pr-10 focus:outline-none focus:ring-2 focus:ring-primary w-48 transition-all dark:text-white border-none" id="desktop-search-input" oninput="handleSearch(this.value, 'desktop-search-results')" placeholder="Search..." type="text">
-                    <span class="material-symbols-outlined absolute right-3 top-2 text-gray-400 text-lg cursor-pointer hover:text-primary">search</span>
-                    <div class="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-[#1A1D29] rounded-lg shadow-2xl border border-gray-200 dark:border-gray-700 hidden z-50 overflow-hidden" id="desktop-search-results">
-                        <div class="search-suggestions-list max-h-[400px] overflow-y-auto search-results"></div>
+                <!-- Desktop Search -->
+                <div class="relative hidden sm:block group search-container">
+                    <input class="bg-gray-100 dark:bg-gray-800 text-sm rounded-full py-2 pl-4 pr-10 focus:outline-none focus:ring-2 focus:ring-primary w-48 transition-all dark:text-white border-none group-focus-within:w-64" 
+                           id="desktop-search-input" 
+                           placeholder="Search movies, shows, anime..." 
+                           type="text"
+                           autocomplete="off"/>
+                    <span class="material-symbols-outlined absolute right-3 top-2 text-gray-400 text-lg cursor-pointer hover:text-primary search-icon">search</span>
+                    <div class="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-[#1A1D29] rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hidden z-50 search-results-container" 
+                         id="desktop-search-results">
+                        <div class="search-suggestions-list max-h-[400px] overflow-y-auto hide-scrollbar p-2 space-y-1" 
+                             id="desktop-search-results-list"></div>
                         <div class="p-3 border-t border-gray-200 dark:border-gray-700 text-center bg-gray-50 dark:bg-[#151926]">
-                            <button class="text-xs font-semibold text-primary hover:text-primary/80 uppercase tracking-wide">View all results</button>
+                            <button id="desktop-view-all-results" 
+                                    class="text-xs font-semibold text-primary hover:text-primary/80 uppercase tracking-wide w-full">
+                                View all results
+                            </button>
                         </div>
                     </div>
                 </div>
+                
+                <!-- Mobile Search Toggle -->
                 <button class="sm:hidden text-gray-600 dark:text-gray-200" onclick="toggleMobileSearch()">
                     <span class="material-symbols-outlined">search</span>
                 </button>
             </div>
         </div>
-        <div class="hidden sm:hidden bg-white dark:bg-[#0B0E19] border-b border-gray-200 dark:border-gray-800 p-3 absolute w-full top-16 left-0 z-30" id="mobile-search-bar">
-            <div class="relative">
-                <input class="w-full bg-gray-100 dark:bg-gray-800 text-sm rounded-full py-2 pl-4 pr-10 focus:outline-none focus:ring-2 focus:ring-primary dark:text-white border-none" oninput="handleSearch(this.value, 'mobile-search-results')" placeholder="Search movies, shows..." type="text">
-                <span class="material-symbols-outlined absolute right-3 top-2 text-gray-400 text-lg">search</span>
-                <div class="absolute top-full left-0 mt-2 w-full bg-white dark:bg-[#1A1D29] rounded-lg shadow-2xl border border-gray-200 dark:border-gray-700 hidden z-50 overflow-hidden" id="mobile-search-results">
-                    <div class="search-suggestions-list max-h-[60vh] overflow-y-auto search-results"></div>
+        
+        <!-- Mobile Search Bar -->
+        <div class="hidden sm:hidden bg-white dark:bg-[#0B0E19] border-b border-gray-200 dark:border-gray-800 p-3 absolute w-full top-16 left-0 z-30" 
+             id="mobile-search-bar">
+            <div class="relative group mobile-search-container">
+                <input class="w-full bg-gray-100 dark:bg-gray-800 text-sm rounded-full py-2 pl-4 pr-10 focus:outline-none focus:ring-2 focus:ring-primary dark:text-white border-none" 
+                       id="mobile-search-input" 
+                       placeholder="Search movies, shows, anime..." 
+                       type="text"
+                       autocomplete="off"/>
+                <span class="material-symbols-outlined absolute right-3 top-2 text-gray-400 text-lg search-icon">search</span>
+                <div class="absolute left-0 top-full mt-2 w-full bg-white dark:bg-[#1A1D29] rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hidden z-50 search-results-container" 
+                     id="mobile-search-results">
+                    <div class="search-suggestions-list max-h-[300px] overflow-y-auto hide-scrollbar p-2 space-y-1" 
+                         id="mobile-search-results-list"></div>
                     <div class="p-3 border-t border-gray-200 dark:border-gray-700 text-center bg-gray-50 dark:bg-[#151926]">
-                        <button class="text-xs font-semibold text-primary hover:text-primary/80 uppercase tracking-wide">View all results</button>
+                        <button id="mobile-view-all-results" 
+                                class="text-xs font-semibold text-primary hover:text-primary/80 uppercase tracking-wide w-full">
+                            View all results
+                        </button>
                     </div>
                 </div>
             </div>
@@ -398,165 +367,422 @@
         </div>
     </footer>
     
-    <!-- JavaScript -->
+    <!-- JavaScript - Moved to bottom for better performance -->
     <script>
+        // ============================================
+        // SIMPLE INTERACTIVE FUNCTIONS (Always available)
+        // ============================================
+        
         // Mobile Menu Toggle
-        function toggleMobileMenu() {
+        window.toggleMobileMenu = function() {
             const menu = document.getElementById('mobile-menu');
             const overlay = document.getElementById('mobile-menu-overlay');
-            menu.classList.toggle('menu-open');
-            overlay.classList.toggle('hidden');
-        }
+            if (!menu || !overlay) return;
+            
+            const isOpening = menu.classList.contains('menu-open');
+            
+            if (!isOpening) {
+                menu.classList.add('menu-open');
+                overlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            } else {
+                menu.classList.remove('menu-open');
+                overlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        };
         
         // Mobile Search Toggle
-        function toggleMobileSearch() {
+        window.toggleMobileSearch = function() {
             const searchBar = document.getElementById('mobile-search-bar');
-            searchBar.classList.toggle('hidden');
-        }
-        
-        // Mobile Dropdown Accordion
-        function toggleMobileDropdown(id) {
-            const dropdown = document.getElementById(id);
-            dropdown.classList.toggle('hidden');
-            const arrowId = id === 'genre-mobile' ? 'genre-arrow' : 'country-arrow';
-            const arrow = document.getElementById(arrowId);
-            if (dropdown.classList.contains('hidden')) {
-                arrow.style.transform = 'rotate(0deg)';
+            if (!searchBar) return;
+            
+            const isHidden = searchBar.classList.contains('hidden');
+            
+            if (isHidden) {
+                searchBar.classList.remove('hidden');
+                setTimeout(() => {
+                    const input = document.getElementById('mobile-search-input');
+                    if (input) {
+                        input.focus();
+                    }
+                }, 100);
             } else {
-                arrow.style.transform = 'rotate(180deg)';
+                searchBar.classList.add('hidden');
             }
-        }
+        };
         
-        // Hero Carousel Logic
-        let currentSlide = 0;
+        // Mobile Dropdown Toggle
+        window.toggleMobileDropdown = function(dropdownId, arrowId) {
+            const dropdown = document.getElementById(dropdownId);
+            const arrow = document.getElementById(arrowId);
+            
+            if (!dropdown || !arrow) return;
+            
+            const isHidden = dropdown.classList.contains('hidden');
+            
+            if (isHidden) {
+                dropdown.classList.remove('hidden');
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                dropdown.classList.add('hidden');
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        };
         
-        // Initialize heart status on load
-        document.addEventListener('DOMContentLoaded', () => {
-            checkHeroStatus(0);
-        });
+        // Hero Carousel Functions
+        window.currentSlide = 0;
         
-        function changeSlide(direction) {
+        window.changeSlide = function(direction) {
             const slides = document.querySelectorAll('.carousel-slide');
             const slideCounterDisplay = document.getElementById('current-slide-display');
             if (slides.length === 0) return;
             
-            slides[currentSlide].classList.remove('active');
-            currentSlide = (currentSlide + direction + slides.length) % slides.length;
-            slides[currentSlide].classList.add('active');
+            slides[window.currentSlide].classList.remove('active');
+            window.currentSlide = (window.currentSlide + direction + slides.length) % slides.length;
+            slides[window.currentSlide].classList.add('active');
             
-            // Update counters
-            if(slideCounterDisplay) slideCounterDisplay.innerText = currentSlide + 1;
+            if(slideCounterDisplay) slideCounterDisplay.innerText = window.currentSlide + 1;
             
-            // Check local storage for this slide
-            checkHeroStatus(currentSlide);
-        }
+            window.checkHeroStatus(window.currentSlide);
+        };
         
-        // Hero Heart Dropdown Status - Updated with LocalStorage
-        function updateHeroStatus(status, slideIndex = currentSlide) {
-            // Save to local storage
+        window.updateHeroStatus = function(status, slideIndex = window.currentSlide) {
             localStorage.setItem(`quravel_hero_status_${slideIndex}`, status);
             console.log(`Saved status for slide ${slideIndex}: ${status}`);
-            
-            // Visual feedback
-            checkHeroStatus(slideIndex);
-            
-            // Close dropdown effect (optional hack since CSS handles hover)
-            const activeSlide = document.querySelector(`.carousel-slide[data-slide-index="${slideIndex}"]`);
-            if(activeSlide) {
-                const dropdown = activeSlide.querySelector('.dropdown-container > div');
-                if(dropdown) {
-                    dropdown.style.visibility = 'hidden';
-                    dropdown.style.opacity = '0';
-                    setTimeout(() => {
-                        dropdown.style.visibility = '';
-                        dropdown.style.opacity = '';
-                    }, 100);
-                }
-            }
-        }
+            window.checkHeroStatus(slideIndex);
+        };
         
-        function checkHeroStatus(slideIndex) {
+        window.checkHeroStatus = function(slideIndex) {
             const status = localStorage.getItem(`quravel_hero_status_${slideIndex}`);
             const activeSlide = document.querySelector(`.carousel-slide[data-slide-index="${slideIndex}"]`);
             if(activeSlide) {
                 const btn = activeSlide.querySelector('.status-btn');
                 if (btn) {
-                    const icon = btn.querySelector('span');
                     if(status) {
-                        // If status exists, change icon style (e.g., filled or colored)
                         btn.classList.add('bg-primary', 'border-primary', 'text-white');
                         btn.classList.remove('bg-white/10', 'border-white/10');
                     } else {
-                        // Reset
                         btn.classList.remove('bg-primary', 'border-primary');
                         btn.classList.add('bg-white/10', 'border-white/10');
                     }
                 }
             }
-        }
+        };
         
-        // Search Functionality
-        const allSearchData = [
-            {img: "https://lh3.googleusercontent.com/aida-public/AB6AXuD_WkTZM5ZJ-NmTWR2UarTBAlvQ7P9ypGwIngTqhz3x53h75oR2QehaiVHXzaZ4EdTlD7DKAbSY7ijEe53JM_Qy1bCiQ3scMkoeKM9P21Jul1ZTTeMx413_PevdOcmb47ryU920sKnA0ByZk2G-iqk0KmNn00obvswj1ep1sci1GkIQQ-ubl71d6VMhb-nRWkRCP4MgrN6zw5y4oW0kuIIRp48E3CwPOGW8HgQ-oHGsUk5CKPiXemUd6XhmHr4YMs6lRbqCLMOQLck", title: "Chainsaw Man - The Movie: Reze Arc", year: "2025", type: "Movie", genre: "Action"},
-            {img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBL8sSKQhkIHjJRpfaXPOb2Ntr-YMNUhdTfQQNGnnmqGZu3SSewBEFAnXpGTo1YxqHXlb8pOCJCZrgrSF00Ey3CMmhZW5Q7dqz5o0qIOeV3DXsmqV-RKQGF2yEnwCFPLqyZ1R9luYVGdw-P_L6bRKjMPRM2RO5ISubiOat46Ovv-uMFsJfxGzRT0ngWoCZXAiiHQbJOA91N5Wyn21gKPKb6rWilqbabiqUYqUEEe31UdFQXOki6b3glJcCnNMssztZkZ0UYU_mwBbY", title: "The Shawshank Redemption", year: "1994", type: "Movie", genre: "Drama"},
-            {img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBuupgb3nD25Wubm40iI5tWuP49EydCaUp0EiYjTBXI3qpDr-LerCLu9i6Cz1lAn9uEWj1X_Fo4FgoziLiAqHVGWLScn06tNXiGQnMbiwIt2Jrc5GUwtVkyxUxR-KnBNZOWx3ius4cMIi_7z-VZzkH8quuTo3pj8kme4akxKKbp_3vqbjKm9T8hT7rQXXLDHgki5FL3xJvGpHw8S68e_dM9PCjJcIIckD9hBK8E3s04iv_DuggJr6t4gvxdoUxAixkHyB5rAiCYW3k", title: "Return of the King", year: "2003", type: "Movie", genre: "Fantasy"},
-            {img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCwH3f4VjulnnLYk8EgFSCiOqFs12q4ivPSqucW7P7k4uOAN3qXURGd7iOxByylKHLJhbpiobEV442fMLZHwobXplWdRez-c71bcZODHHIHORqZw97zdSx_JgA4Cdym9n6VMtpcJXo3o5jc7jvKx13nsU2frrHJ8wgbcRH1cHIY8n7jLkRIsYOLDQ1uZWoGe99Imz98f_X9qskRvSTRVJiiJKF_DtE-ce0qw825vrwhgb66FQM3e_ymqoB8eBbjLZ5HuUePqbU5kYg", title: "The Godfather", year: "1972", type: "Movie", genre: "Crime"},
-            {img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCKepUuUHAz1GAAh9d1TP86fQ1cNEGF_A7Fi00ANN4rMbe5iAkgL18ZwXQ_bLabOJGS3Iw3kmWCMR-_bC6J8ZAQj7Fa0-ag_YKIFuGatJ4ZNgTMz3biJI_2j3tsHgv6s5Plmkoc0FaWk6FRXJ7WJDhwAwq6eIC8fEwWyZ8Qvnrk_GSsXRCVgO8Pvsa1YoJHTDbL3GoE4tSEYDIt8M5edImu39b2CQwvrurfgk06BuS_MZ3XIZgyYP78SnTXm3iVxTS6JSkhKhF0G4U", title: "Stranger Things", year: "2016", type: "TV Show", genre: "Sci-Fi"},
-            {img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBL8sSKQhkIHjJRpfaXPOb2Ntr-YMNUhdTfQQNGnnmqGZu3SSewBEFAnXpGTo1YxqHXlb8pOCJCZrgrSF00Ey3CMmhZW5Q7dqz5o0qIOeV3DXsmqV-RKQGF2yEnwCFPLqyZ1R9luYVGdw-P_L6bRKjMPRM2RO5ISubiOat46Ovv-uMFsJfxGzRT0ngWoCZXAiiHQbJOA91N5Wyn21gKPKb6rWilqbabiqUYqUEEe31UdFQXOki6b3glJcCnNMssztZkZ0UYU_mwBbY", title: "Breaking Bad", year: "2008", type: "TV Show", genre: "Crime"},
-            {img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDqiUc86NAc2oPWF0jZS6ltVT0qDRUQLGYe-vsh90aCjNPCKRUYsR2joEXfq121iCQ1DMhEXbbjY-Rm6ydRKKVvOD7XCHpsnpYv4oUDQP6h-KZ9tUpwQb33LAseATibNSPDDxAViL3XAYheHWPQCau7pQCd7-XFT2YjY86y-DFUxv6SfYoh27gsa2-RiKjPMnhZfSvjYzFQSeYDzy64a_9Lmf5_NT9MkYffdzHclH1EyMht0psBW3wqnbmTFh6wbG5Xh4VXCnRWONM", title: "Jujutsu Kaisen", year: "2020", type: "Anime", genre: "Action"},
-            {img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCwH3f4VjulnnLYk8EgFSCiOqFs12q4ivPSqucW7P7k4uOAN3qXURGd7iOxByylKHLJhbpiobEV442fMLZHwobXplWdRez-c71bcZODHHIHORqZw97zdSx_JgA4Cdym9n6VMtpcJXo3o5jc7jvKx13nsU2frrHJ8wgbcRH1cHIY8n7jLkRIsYOLDQ1uZWoGe99Imz98f_X9qskRvSTRVJiiJKF_DtE-ce0qw825vrwhgb66FQM3e_ymqoB8eBbjLZ5HuUePqbU5kYg", title: "One Piece", year: "1999", type: "Anime", genre: "Adventure"}
-        ];
+        // ============================================
+        // SEARCH MANAGER
+        // ============================================
+        const SearchManager = {
+            liteData: [],
+            isLoaded: false,
+            
+            // Sample data for testing - replace with your actual data
+            sampleData: [
+                {
+                    title: "Chainsaw Man - The Movie: Reze Arc",
+                    posterUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuD_WkTZM5ZJ-NmTWR2UarTBAlvQ7P9ypGwIngTqhz3x53h75oR2QehaiVHXzaZ4EdTlD7DKAbSY7ijEe53JM_Qy1bCiQ3scMkoeKM9P21Jul1ZTTeMx413_PevdOcmb47ryU920sKnA0ByZk2G-iqk0KmNn00obvswj1ep1sci1GkIQQ-ubl71d6VMhb-nRWkRCP4MgrN6zw5y4oW0kuIIRp48E3CwPOGW8HgQ-oHGsUk5CKPiXemUd6XhmHr4YMs6lRbqCLMOQLck",
+                    airedYear: "2025",
+                    type: "Movie",
+                    genres: ["Action"],
+                    url: "/movie/chainsaw-man-reze-arc",
+                    searchLower: "chainsaw man the movie reze arc action movie 2025"
+                },
+                {
+                    title: "The Shawshank Redemption",
+                    posterUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuBL8sSKQhkIHjJRpfaXPOb2Ntr-YMNUhdTfQQNGnnmqGZu3SSewBEFAnXpGTo1YxqHXlb8pOCJCZrgrSF00Ey3CMmhZW5Q7dqz5o0qIOeV3DXsmqV-RKQGF2yEnwCFPLqyZ1R9luYVGdw-P_L6bRKjMPRM2RO5ISubiOat46Ovv-uMFsJfxGzRT0ngWoCZXAiiHQbJOA91N5Wyn21gKPKb6rWilqbabiqUYqUEEe31UdFQXOki6b3glJcCnNMssztZkZ0UYU_mwBbY",
+                    airedYear: "1994",
+                    type: "Movie",
+                    genres: ["Drama"],
+                    url: "/movie/shawshank-redemption",
+                    searchLower: "the shawshank redemption drama movie 1994"
+                },
+                {
+                    title: "Return of the King",
+                    posterUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuBuupgb3nD25Wubm40iI5tWuP49EydCaUp0EiYjTBXI3qpDr-LerCLu9i6Cz1lAn9uEWj1X_Fo4FgoziLiAqHVGWLScn06tNXiGQnMbiwIt2Jrc5GUwtVkyxUxR-KnBNZOWx3ius4cMIi_7z-VZzkH8quuTo3pj8kme4akxKKbp_3vqbjKm9T8hT7rQXXLDHgki5FL3xJvGpHw8S68e_dM9PCjJcIIckD9hBK8E3s04iv_DuggJr6t4gvxdoUxAixkHyB5rAiCYW3k",
+                    airedYear: "2003",
+                    type: "Movie",
+                    genres: ["Fantasy"],
+                    url: "/movie/return-of-the-king",
+                    searchLower: "return of the king fantasy movie 2003"
+                },
+                {
+                    title: "The Godfather",
+                    posterUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuCwH3f4VjulnnLYk8EgFSCiOqFs12q4ivPSqucW7P7k4uOAN3qXURGd7iOxByylKHLJhbpiobEV442fMLZHwobXplWdRez-c71bcZODHHIHORqZw97zdSx_JgA4Cdym9n6VMtpcJXo3o5jc7jvKx13nsU2frrHJ8wgbcRH1cHIY8n7jLkRIsYOLDQ1uZWoGe99Imz98f_X9qskRvSTRVJiiJKF_DtE-ce0qw825vrwhgb66FQM3e_ymqoB8eBbjLZ5HuUePqbU5kYg",
+                    airedYear: "1972",
+                    type: "Movie",
+                    genres: ["Crime"],
+                    url: "/movie/godfather",
+                    searchLower: "the godfather crime movie 1972"
+                },
+                {
+                    title: "Stranger Things",
+                    posterUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuCKepUuUHAz1GAAh9d1TP86fQ1cNEGF_A7Fi00ANN4rMbe5iAkgL18ZwXQ_bLabOJGS3Iw3kmWCMR-_bC6J8ZAQj7Fa0-ag_YKIFuGatJ4ZNgTMz3biJI_2j3tsHgv6s5Plmkoc0FaWk6FRXJ7WJDhwAwq6eIC8fEwWyZ8Qvnrk_GSsXRCVgO8Pvsa1YoJHTDbL3GoE4tSEYDIt8M5edImu39b2CQwvrurfgk06BuS_MZ3XIZgyYP78SnTXm3iVxTS6JSkhKhF0G4U",
+                    airedYear: "2016",
+                    type: "TV Show",
+                    genres: ["Sci-Fi"],
+                    url: "/show/stranger-things",
+                    searchLower: "stranger things sci fi tv show 2016"
+                },
+                {
+                    title: "Breaking Bad",
+                    posterUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuBL8sSKQhkIHjJRpfaXPOb2Ntr-YMNUhdTfQQNGnnmqGZu3SSewBEFAnXpGTo1YxqHXlb8pOCJCZrgrSF00Ey3CMmhZW5Q7dqz5o0qIOeV3DXsmqV-RKQGF2yEnwCFPLqyZ1R9luYVGdw-P_L6bRKjMPRM2RO5ISubiOat46Ovv-uMFsJfxGzRT0ngWoCZXAiiHQbJOA91N5Wyn21gKPKb6rWilqbabiqUYqUEEe31UdFQXOki6b3glJcCnNMssztZkZ0UYU_mwBbY",
+                    airedYear: "2008",
+                    type: "TV Show",
+                    genres: ["Crime"],
+                    url: "/show/breaking-bad",
+                    searchLower: "breaking bad crime tv show 2008"
+                },
+                {
+                    title: "Jujutsu Kaisen",
+                    posterUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuDqiUc86NAc2oPWF0jZS6ltVT0qDRUQLGYe-vsh90aCjNPCKRUYsR2joEXfq121iCQ1DMhEXbbjY-Rm6ydRKKVvOD7XCHpsnpYv4oUDQP6h-KZ9tUpwQb33LAseATibNSPDDxAViL3XAYheHWPQCau7pQCd7-XFT2YjY86y-DFUxv6SfYoh27gsa2-RiKjPMnhZfSvjYzFQSeYDzy64a_9Lmf5_NT9MkYffdzHclH1EyMht0psBW3wqnbmTFh6wbG5Xh4VXCnRWONM",
+                    airedYear: "2020",
+                    type: "Anime",
+                    genres: ["Action"],
+                    url: "/anime/jujutsu-kaisen",
+                    searchLower: "jujutsu kaisen action anime 2020"
+                },
+                {
+                    title: "One Piece",
+                    posterUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuCwH3f4VjulnnLYk8EgFSCiOqFs12q4ivPSqucW7P7k4uOAN3qXURGd7iOxByylKHLJhbpiobEV442fMLZHwobXplWdRez-c71bcZODHHIHORqZw97zdSx_JgA4Cdym9n6VMtpcJXo3o5jc7jvKx13nsU2frrHJ8wgbcRH1cHIY8n7jLkRIsYOLDQ1uZWoGe99Imz98f_X9qskRvSTRVJiiJKF_DtE-ce0qw825vrwhgb66FQM3e_ymqoB8eBbjLZ5HuUePqbU5kYg",
+                    airedYear: "1999",
+                    type: "Anime",
+                    genres: ["Adventure"],
+                    url: "/anime/one-piece",
+                    searchLower: "one piece adventure anime 1999"
+                }
+            ],
+            
+            loadData: function() {
+                if (this.isLoaded) return;
+                
+                // Try to load from API or use sample data
+                console.log("Loading search data...");
+                
+                // For now, use sample data
+                this.liteData = this.sampleData;
+                this.isLoaded = true;
+                console.log(`Loaded ${this.liteData.length} search items`);
+            },
+            
+            search: function(query, limit = 5) {
+                query = query.toLowerCase().trim();
+                if (!query || query.length < 2) return [];
+                
+                this.loadData();
+                
+                const results = this.liteData.filter(item => 
+                    item.searchLower.includes(query)
+                ).sort((a, b) => {
+                    // Prioritize exact matches
+                    const aExact = a.title.toLowerCase() === query;
+                    const bExact = b.title.toLowerCase() === query;
+                    if (aExact && !bExact) return -1;
+                    if (!aExact && bExact) return 1;
+                    
+                    // Then title starts with query
+                    const aStarts = a.title.toLowerCase().startsWith(query);
+                    const bStarts = b.title.toLowerCase().startsWith(query);
+                    if (aStarts && !bStarts) return -1;
+                    if (!aStarts && bStarts) return 1;
+                    
+                    return 0;
+                }).slice(0, limit);
+                
+                return results;
+            }
+        };
         
-        function handleSearch(query, resultsContainerId) {
-            const container = document.getElementById(resultsContainerId);
-            const list = container.querySelector('.search-suggestions-list');
-            if(query.length < 1) {
-                container.classList.add('hidden');
-                return;
+        // ============================================
+        // SEARCH INTERFACE
+        // ============================================
+        class SearchInterface {
+            constructor(type) {
+                this.type = type;
+                this.input = document.getElementById(`${type}-search-input`);
+                this.resultsList = document.getElementById(`${type}-search-results-list`);
+                this.resultsContainer = document.getElementById(`${type}-search-results`);
+                this.viewAllButton = document.getElementById(`${type}-view-all-results`);
+                
+                if (!this.input || !this.resultsList || !this.resultsContainer || !this.viewAllButton) {
+                    console.warn(`Search interface ${type} not fully initialized`);
+                    return;
+                }
+                
+                this.init();
             }
             
-            // Filter data (case insensitive)
-            const filtered = allSearchData.filter(item => item.title.toLowerCase().includes(query.toLowerCase()));
+            init() {
+                // Debounced input handler
+                this.input.addEventListener('input', this.debounce((e) => {
+                    this.handleInput(e.target.value);
+                }, 300));
+                
+                // Enter key
+                this.input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        this.handleEnter(this.input.value);
+                    }
+                });
+                
+                // Focus
+                this.input.addEventListener('focus', () => {
+                    if (this.input.value.trim()) {
+                        this.handleInput(this.input.value);
+                    }
+                });
+                
+                // View all button
+                this.viewAllButton.addEventListener('click', () => {
+                    this.handleEnter(this.input.value);
+                });
+                
+                // Close on outside click
+                document.addEventListener('click', (e) => {
+                    const container = this.type === 'desktop' ? 
+                        document.querySelector('.search-container') : 
+                        document.querySelector('.mobile-search-container');
+                    
+                    if (container && !container.contains(e.target)) {
+                        this.resultsContainer.classList.add('hidden');
+                    }
+                });
+            }
             
-            // Limit to 7 items as requested
-            const limitedResults = filtered.slice(0, 7);
+            debounce(func, wait) {
+                let timeout;
+                return (...args) => {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(this, args), wait);
+                };
+            }
             
-            // Build HTML
-            if(limitedResults.length > 0) {
-                list.innerHTML = limitedResults.map(item => `
-                    <div class="flex gap-3 p-3 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer transition-colors border-b border-gray-100 dark:border-gray-800 last:border-0">
-                        <img src="${item.img}" alt="${item.title}" class="w-10 h-14 object-cover rounded shadow-sm flex-shrink-0">
-                        <div class="flex flex-col justify-center">
-                            <h4 class="text-sm font-semibold text-gray-900 dark:text-white leading-tight mb-1">${item.title}</h4>
-                            <div class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-2">
-                                <span>${item.year}</span>
-                                <span class="w-1 h-1 bg-gray-400 rounded-full"></span>
-                                <span>${item.type}</span>
-                                <span class="w-1 h-1 bg-gray-400 rounded-full"></span>
-                                <span>${item.genre}</span>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-                container.classList.remove('hidden');
-            } else {
-                 list.innerHTML = `
-                    <div class="p-4 text-center text-sm text-gray-500 dark:text-gray-400">
-                        No results found for "${query}"
+            handleInput(query) {
+                query = query.trim();
+                
+                if (!query || query.length < 1) {
+                    this.resultsContainer.classList.add('hidden');
+                    return;
+                }
+                
+                this.showLoading();
+                
+                const results = SearchManager.search(query, 5);
+                this.displayResults(results, query);
+            }
+            
+            handleEnter(query) {
+                query = query.trim();
+                if (query) {
+                    window.location.href = `/search/?q=${encodeURIComponent(query)}`;
+                }
+            }
+            
+            showLoading() {
+                this.resultsList.innerHTML = `
+                    <div class="p-4 text-center">
+                        <div class="inline-block animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-primary"></div>
+                        <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">Searching...</p>
                     </div>
                 `;
-                container.classList.remove('hidden');
+                this.resultsContainer.classList.remove('hidden');
+            }
+            
+            displayResults(results, query) {
+                if (results.length > 0) {
+                    let html = '';
+                    results.forEach(item => {
+                        const typeClass = this.getTypeClass(item.type);
+                        const genre = item.genres && item.genres.length > 0 ? item.genres[0] : '';
+                        
+                        html += `
+                            <a href="${item.url}" class="flex gap-3 p-3 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer transition-colors border-b border-gray-100 dark:border-gray-800 last:border-0 group/item">
+                                <img src="${item.posterUrl}" alt="${item.title}" 
+                                     class="w-10 h-14 object-cover rounded shadow-sm flex-shrink-0"
+                                     loading="lazy"
+                                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNTYiIHZpZXdCb3g9IjAgMCA0MCA1NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAiIGhlaWdodD0iNTYiIGZpbGw9IiNGM0Y0RjYiLz48cGF0aCBkPSJNMTIgMjJMMjggMzRMMzYgMjRMMzQgMTZMMjIgMTJMMTAgMThMMTIgMjJaIiBmaWxsPSIjNDk4QkJCIiBmaWxsLW9wYWNpdHk9IjAuMyIvPjwvc3ZnPg=='">
+                                <div class="flex flex-col justify-center flex-1 min-w-0">
+                                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white truncate group-hover/item:text-primary mb-1">
+                                        ${this.highlightText(item.title, query)}
+                                    </h4>
+                                    <div class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-2">
+                                        <span>${item.airedYear || ''}</span>
+                                        <span class="w-1 h-1 bg-gray-400 rounded-full"></span>
+                                        <span class="px-1 py-0.5 ${typeClass} text-white text-[10px] rounded">${item.type || 'Show'}</span>
+                                        ${genre ? `<span class="w-1 h-1 bg-gray-400 rounded-full"></span><span class="truncate">${genre}</span>` : ''}
+                                    </div>
+                                </div>
+                            </a>
+                        `;
+                    });
+                    
+                    this.resultsList.innerHTML = html;
+                    this.viewAllButton.textContent = `View all results (${results.length})`;
+                    this.resultsContainer.classList.remove('hidden');
+                } else {
+                    this.resultsList.innerHTML = `
+                        <div class="p-4 text-center text-sm text-gray-500 dark:text-gray-400">
+                            No results found for "${query}"
+                            <p class="text-xs mt-1">Try different keywords</p>
+                        </div>
+                    `;
+                    this.resultsContainer.classList.remove('hidden');
+                }
+            }
+            
+            getTypeClass(type) {
+                switch((type || '').toLowerCase()) {
+                    case 'anime': return 'bg-purple-500';
+                    case 'movie': return 'bg-blue-500';
+                    case 'tv show': return 'bg-green-500';
+                    case 'series': return 'bg-green-500';
+                    default: return 'bg-gray-500';
+                }
+            }
+            
+            highlightText(text, query) {
+                if (!query || !text) return text;
+                const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+                return text.replace(regex, '<span class="text-primary font-bold">$1</span>');
             }
         }
         
-        // Close search dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const desktopSearch = document.getElementById('desktop-search-results');
-            const desktopInput = document.getElementById('desktop-search-input');
-            if (!desktopInput.contains(event.target) && !desktopSearch.contains(event.target)) {
-                desktopSearch.classList.add('hidden');
+        // ============================================
+        // INITIALIZE EVERYTHING WHEN DOM IS READY
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing components...');
+            
+            // Load search data
+            SearchManager.loadData();
+            
+            // Initialize search interfaces
+            setTimeout(() => {
+                new SearchInterface('desktop');
+                new SearchInterface('mobile');
+            }, 100);
+            
+            // Initialize hero carousel if exists
+            if (document.querySelector('.carousel-slide')) {
+                window.checkHeroStatus(0);
             }
+            
+            // Close mobile menu when clicking on links
+            const mobileMenuLinks = document.querySelectorAll('#mobile-menu a');
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    window.toggleMobileMenu();
+                });
+            });
         });
+        
+        // Backup initialization in case DOMContentLoaded already fired
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            setTimeout(() => {
+                document.dispatchEvent(new Event('DOMContentLoaded'));
+            }, 1);
+        }
     </script>
 </body>
 </html>
